@@ -24,7 +24,8 @@ export async function getExchangeRate(from: string, to: string): Promise<Exchang
   try {
     const response = await fetch(
       `${getExchangeApiUrl()}/latest?base=${encodeURIComponent(from)}&symbols=${encodeURIComponent(to)}`,
-      { signal: controller.signal },
+      // Bypass the transport cache so offline data comes from our dated SQLite cache.
+      { signal: controller.signal, cache: 'no-store' },
     );
 
     if (!response.ok) {
