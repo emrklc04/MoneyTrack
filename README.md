@@ -22,6 +22,24 @@ MoneyTrack ist ein mobiles Haushaltsbuch mit React Native und Expo. Transaktione
 
 Die Navigation besteht aus fünf Tabs sowie einer Detailansicht und einem Formular zum Hinzufügen von Transaktionen.
 
+## Screenshots
+
+Aufnahmen aus dem Android-Emulator mit Beispieldaten. Die Bilder zeigen unterschiedliche Schritte beim Erfassen der Transaktionen; deshalb unterscheiden sich die Summen zwischen Dashboard und Statistik.
+
+### Überblick und Auswertung
+
+| Dashboard | Statistiken | Budgets |
+|:---:|:---:|:---:|
+| <img src="assets/screenshots/dashboard.png" alt="Dashboard mit Einnahmen, Ausgaben, Saldo und letzten Transaktionen" width="220"> | <img src="assets/screenshots/statistics.png" alt="Statistiken mit Sparquote und Ausgaben nach Kategorien" width="220"> | <img src="assets/screenshots/budgets.png" alt="Monatsbudgets mit Fortschrittsbalken und Warnung bei Überschreitung" width="220"> |
+| Finanzen auf einen Blick | Ausgaben und Sparquote auswerten | Monatslimits im Blick behalten |
+
+### Transaktion mit Fremdwährung
+
+| Neue Transaktion | Transaktionsdetails |
+|:---:|:---:|
+| <img src="assets/screenshots/add-transaction.png" alt="Formular für eine USD-Ausgabe mit Wechselkurs, Kursdatum und EUR-Umrechnung" width="260"> | <img src="assets/screenshots/transaction-details.png" alt="Gespeicherter Online-Einkauf mit umgerechnetem Betrag und Originalbetrag in USD" width="260"> |
+| Betrag, Kategorie und Währung auswählen | Gespeicherte Angaben und Originalbetrag ansehen |
+
 ## Technologie
 
 | Aufgabe | Umsetzung |
@@ -153,12 +171,3 @@ Diese manuellen Ergebnisse wurden vom Team im gemeinsamen Test bestätigt. Autom
 Die App verwendet aktuell keine Anmeldung und speichert keine Auth-Tokens. Für eine spätere Anmeldung müssen Zugangsdaten getrennt von gewöhnlichen App-Daten sicher gespeichert werden. Finanzdaten und Belege liegen lokal, sind dadurch aber nicht automatisch verschlüsselt.
 
 Zwei überprüfte Gitleaks-Treffer aus alten IDE-Tab-UUIDs sind als gezielte Fehlalarme in `.gitleaksignore` dokumentiert. Persönliche IDE-Dateien, lokale Expo-Dateien, Abhängigkeiten und Bundle-Exporte werden nicht neu versioniert.
-
-## Noch offen vor der Abgabe
-
-- Screenshots oder GIFs der wichtigsten App-Abläufe ergänzen.
-- Kameraablehnung, Fotoersetzung, Offline-Löschen, API-Ausfall/Cache und Hauptwährungswechsel auf dem Gerät vollständig prüfen.
-- Den vollständigen Offline-Neustart mit einem installierten App-Build testen.
-- Performance auf dem Gerät messen; bisher liegen keine Profiling-Ergebnisse vor. Für eine erste Analyse lassen sich React Native DevTools im Expo-Terminal mit `j` öffnen. Entwicklungsprofile ersetzen keine Messung eines Builds ohne Entwicklungsmodus.
-- Die Kursvorgaben zu privater Repository-Sichtbarkeit, `FHTW-CPD` und dem offiziellen Template mit dem Repository-Inhaber klären.
-- Die konkrete AI Usage Policy beachten, den Code-Walkthrough vorbereiten und den Repository-Link vor der Deadline auf Moodle einreichen.
