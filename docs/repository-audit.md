@@ -6,6 +6,8 @@ Stand: 8. November 2026. Repository: `emrklc04/MoneyTrack`, Standardbranch `main
 
 Das lokale Projekt wurde mit der vorhandenen Git-Historie verbunden. Vorhandene Commits bleiben erhalten. Der angemeldete GitHub-Nutzer ist `kokoloko99`; die lokale Commit-Identität stimmt mit der E-Mail des verbundenen Kontos überein. Commits werden mit dem tatsächlichen Datum erstellt. Beiträge des Kollegen werden nicht umgeschrieben oder künstlich einem anderen Autor zugeordnet.
 
+Nach dem Push über die GitHub-API bestätigt: `emrklc04` und `kokoloko99` sind beide mit eigenen Commits auf `main` als Contributors erfasst. Der App-Commit `c02704c` und der CI-Commit `74e0088` sind dem Konto `kokoloko99` zugeordnet. GitHub-Zugriffsrolle: WRITE; Repository-Sichtbarkeit: PUBLIC.
+
 ## Secret-Audit
 
 - Gitleaks 8.30.1 aus dem offiziellen Release, Windows-Archiv vor Verwendung per SHA-256 geprüft.
@@ -22,6 +24,10 @@ Ein Muster-Scan kann unbekannte oder nicht erkannte Secrets nicht ausschließen.
 Die CI-Konfiguration unter `.github/workflows/ci.yml` ist für Pushes auf `main`, Pull Requests und manuelle Ausführung vorbereitet. Sie installiert mit `npm ci` unter Node 22 und führt Lint, Typecheck und Unit-/Komponententests aus. Ein separater Job prüft die vollständige ausgecheckte Historie mit Gitleaks. Actions sind auf Commit-SHAs festgelegt; der Workflow braucht nur lesenden Repository-Zugriff und keine privaten API-Secrets.
 
 Der tatsächliche GitHub-Ausführungsstatus muss nach dem Push im Actions-Tab geprüft werden. Eine CI-Pipeline erstellt noch keinen installierbaren App-Build und ersetzt keine Gerätetests.
+
+Erster tatsächlicher GitHub-Lauf für `74e0088`: [CI 42489500066](https://github.com/emrklc04/MoneyTrack/actions/runs/42489500066), erfolgreich am 8. November 2026. Sowohl „Lint, types and tests“ als auch „Scan Git history for secrets“ bestanden. Neuere Ausführungen stehen im Actions-Tab.
+
+Lokale Abschlussprüfung vor dem Push: 36 Tests in fünf Suiten bestanden; Lint und Typecheck erfolgreich. Gitleaks hat nach dem CI-Commit alle vier verfügbaren Commits geprüft: keine weiteren Funde neben den gezielt dokumentierten IDE-UUID-Fehlalarmen.
 
 ## Noch gesondert abzuschließen
 

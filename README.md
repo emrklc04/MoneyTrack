@@ -4,6 +4,10 @@ Mobiles Haushaltsbuch mit Expo SDK 58, React Native und TypeScript. Dashboard, T
 
 Repository: [emrklc04/MoneyTrack](https://github.com/emrklc04/MoneyTrack). Gemeinsamer Zustand mit React Context und `useReducer`.
 
+[![CI](https://github.com/emrklc04/MoneyTrack/actions/workflows/ci.yml/badge.svg)](https://github.com/emrklc04/MoneyTrack/actions/workflows/ci.yml)
+
+Team: [emrklc04](https://github.com/emrklc04) und [kokoloko99](https://github.com/kokoloko99). Beide Konten haben eigene Commits auf `main`.
+
 ## Start
 
 Node.js 22.13 oder neuer innerhalb der 22er-Reihe und npm verwenden. Repository klonen und in den Projektordner wechseln:
