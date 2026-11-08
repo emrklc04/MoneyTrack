@@ -10,7 +10,7 @@ function getReceiptsDirectory(): Directory {
 
 export function saveReceiptImage(temporaryUri: string, transactionId: string): string {
   const sourceFile = new File(temporaryUri);
-  const destinationFile = new File(getReceiptsDirectory(), `${transactionId}.jpg`);
+  const destinationFile = new File(getReceiptsDirectory(), `${transactionId}-${Date.now()}-${Math.random().toString(36).slice(2)}.jpg`);
   sourceFile.copy(destinationFile);
   return destinationFile.uri;
 }

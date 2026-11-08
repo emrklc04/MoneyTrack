@@ -3,9 +3,14 @@
 # dependencies
 node_modules/
 
+# Personal IDE state
+.idea/
+*.iml
+
 # Expo
 .expo/
 dist/
+dist-validation/
 web-build/
 expo-env.d.ts
 
@@ -31,7 +36,9 @@ yarn-error.*
 *.pem
 
 # local env files
-.env*.local
+.env
+.env.*
+!.env.example
 
 # typescript
 *.tsbuildinfo

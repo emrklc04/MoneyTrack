@@ -1,56 +1,75 @@
-# Welcome to your Expo app 👋
+# MoneyTrack
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Mobiles Haushaltsbuch mit Expo SDK 58, React Native und TypeScript. Dashboard, Transaktionen, Statistiken, Monatsbudgets, Einstellungen und fotografierte Belege.
 
-## Get started
+Repository: [emrklc04/MoneyTrack](https://github.com/emrklc04/MoneyTrack). Gemeinsamer Zustand mit React Context und `useReducer`.
 
-1. Install dependencies
+## Start
 
-   ```bash
-   npm install
-   ```
+Node.js 22.13 oder neuer innerhalb der 22er-Reihe und npm verwenden. Repository klonen und in den Projektordner wechseln:
 
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```powershell
+git clone https://github.com/emrklc04/MoneyTrack.git
+cd MoneyTrack
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+```powershell
+npm ci
+Copy-Item .env.example .env
+npx expo start
+```
 
-### Other setup steps
+Eine vorhandene .env behalten. Auf einem passenden Expo Go oder Development Build auf Android/iOS starten. Web ersetzt keinen nativen Test.
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## Konfiguration und Sicherheit
 
-## Learn more
+.env konfiguriert EXPO_PUBLIC_EXCHANGE_API_URL. .env und Varianten sind ausgeschlossen; .env.example bleibt als Vorlage erhalten. Expo nimmt EXPO_PUBLIC_-Werte ins App-Bundle auf: nur oeffentliche Konfiguration verwenden. Keine privaten API-/AI-Schluessel im Client hinterlegen; diese gehoeren auf einen Server. Die Wechselkurs-API benoetigt keinen Schluessel.
 
-To learn more about developing your project with Expo, look at the following resources:
+## Architektur
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- src/app: Expo Router, fuenf Tabs plus Formular-Modal und Detail-Stack.
+- src/context: AppContext mit useReducer fuer gemeinsame Daten und kontrollierte Updates nach erfolgreichem Speichern.
+- src/models: TypeScript-Datenmodelle.
+- src/services: REST-Abfragen, Umrechnung und Belegspeicherung.
+- src/config: Umgebungskonfiguration.
+- src/database: SQLite und parametrisierte Abfragen.
+- src/components und src/hooks: wiederverwendbare UI und Hooks.
+- src/utils: Finanzberechnungen und Formatierung.
 
-## Join the community
+Datenfluss: Formular -> Wechselkurs-Service -> Context -> SQLite -> Reducer -> Dashboard/Liste. Alle Screens lesen denselben Context.
 
-Join our community of developers creating universal apps.
+## Offline und Waehrungen
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Transaktionen, Budgets, Hauptwaehrung und Kurse liegen in SQLite; Fotos im Dokumentenverzeichnis. Beim Start werden gespeicherte Daten geladen. Bei Ladefehlern erscheint eine Wiederholungsoption.
+
+Die Kursanzeige zeigt Laden, Erfolg mit Kursdatum und Umrechnung sowie Fehler mit Wiederholen. Eine Anfrage hat zehn Sekunden Timeout. Bei API-Ausfall wird ein vorhandener Kurs mit Cache-Hinweis verwendet; Aktualitaet ist dann nicht garantiert.
+
+Neue Fremdwaehrungstransaktionen ohne Kurs werden nicht gespeichert. Hauptwaehrung funktioniert offline. Alte Fremdwaehrungseintraege ohne Umrechnung erscheinen im Original und werden mit Hinweis aus Summen ausgeschlossen.
+
+Beim Wechsel der Hauptwaehrung werden bisherige umgerechnete Betraege und Budgets gemeinsam umgerechnet und atomar gespeichert. Originalbetraege bleiben erhalten. Alte Eintraege ohne Umrechnung werden aus ihrer Originalwaehrung umgerechnet. Fehlt ein noetiger Kurs, bleibt der Stand erhalten. Dies konvertiert bisherige Buchwerte und rekonstruiert keine historischen Tageskurse.
+
+## Pruefungen
+
+```powershell
+npm test -- --runInBand
+npm run lint
+npx tsc --noEmit
+npx expo export --platform android
+```
+
+Tests: Reducer, Finanzberechnungen, API-/Cache-Fehler, ungueltige Kurse, Timeout und Waehrungswechsel. Unit-Tests ersetzen keine nativen Kamera-/SQLite-Tests. Manuelles Protokoll: docs/device-test.md.
+
+UI-Komponententests: `npm run test:components`. Einzelne Unit-Tests: `npm run test:unit`. Grundlagen, Testbeispiele und Profiling-Messplan stehen in [docs/testing-and-performance.md](docs/testing-and-performance.md). Profiling auf dem iPhone ist vorbereitet, aber noch nicht gemessen.
+
+GitHub Actions prueft Pushes auf `main` und Pull Requests mit Lint, Typecheck, Tests und einem Secret-Scan der Git-Historie. Der aktuelle Ausfuehrungsstatus steht unter [Actions](https://github.com/emrklc04/MoneyTrack/actions). Details und verbleibende Abgabepunkte stehen in [docs/repository-audit.md](docs/repository-audit.md).
+
+## Code-Walkthrough
+
+1. Navigation in beiden _layout.tsx erklaeren.
+2. Eine Transaktion durch Formular, Service, Context und Datenbank bis zum Dashboard verfolgen.
+3. Reducer und unveraenderliche Updates erklaeren.
+4. API-Erfolg, Timeout, Cache und fehlenden Kurs demonstrieren.
+5. Kamera-Berechtigung, Aufnahme und dauerhafte Bildspeicherung erklaeren.
+6. Waehrungswechsel und Tests anhand konkreter Beispiele erlaeutern.
+
+Die genaue AI Usage Policy muss das Team noch pruefen. Hilfsmittel und eigene Beitraege entsprechend dokumentieren.

@@ -1,0 +1,3 @@
+# Reviewed false positives: UUID keys for IDE tabs, not authentication credentials.
+fb5638fbfbea6fe5355723a12c9a4bb20c68055d:.idea/claudeCodeEditorTabs.xml:generic-api-key:12
+fb5638fbfbea6fe5355723a12c9a4bb20c68055d:.idea/claudeCodeEditorTabs.xml:generic-api-key:17
