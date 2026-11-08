@@ -61,11 +61,21 @@ npx tsc --noEmit
 npx expo export --platform android
 ```
 
-Tests: Reducer, Finanzberechnungen, API-/Cache-Fehler, ungueltige Kurse, Timeout und Waehrungswechsel. Unit-Tests ersetzen keine nativen Kamera-/SQLite-Tests. Manuelles Protokoll: docs/device-test.md.
+Tests: Reducer, Finanzberechnungen, API-/Cache-Fehler, ungueltige Kurse, Timeout und Waehrungswechsel. Unit-Tests ersetzen keine nativen Kamera-/SQLite-Tests.
 
-UI-Komponententests: `npm run test:components`. Einzelne Unit-Tests: `npm run test:unit`. Grundlagen, Testbeispiele und Profiling-Messplan stehen in [docs/testing-and-performance.md](docs/testing-and-performance.md). Profiling auf dem iPhone ist vorbereitet, aber noch nicht gemessen.
+UI-Komponententests: `npm run test:components`. Einzelne Unit-Tests: `npm run test:unit`. Die Komponententests pruefen Ladeanzeige, Kurs/Datum/Umrechnung, Cache-Hinweis, Fehler, Wiederholen und verspaetete Antworten. Dabei wird nur der Wechselkurs-Service simuliert; die Komponente wird mit React Native Testing Library gerendert und bedient.
 
-GitHub Actions prueft Pushes auf `main` und Pull Requests mit Lint, Typecheck, Tests und einem Secret-Scan der Git-Historie. Der aktuelle Ausfuehrungsstatus steht unter [Actions](https://github.com/emrklc04/MoneyTrack/actions). Details und verbleibende Abgabepunkte stehen in [docs/repository-audit.md](docs/repository-audit.md).
+GitHub Actions prueft Pushes auf `main` und Pull Requests mit Lint, Typecheck, Tests und einem Secret-Scan der Git-Historie. Der aktuelle Ausfuehrungsstatus steht unter [Actions](https://github.com/emrklc04/MoneyTrack/actions). Am 8. November 2026 bestanden lokal und auf GitHub alle 36 Tests sowie Lint, Typecheck und Secret-Scan. Zwei gepruefte IDE-Tab-UUIDs sind als gezielte Fehlalarme in `.gitleaksignore` dokumentiert. `.env` wird nicht versioniert.
+
+## Geraetetests und offene Pruefungen
+
+Vom Nutzer auf einem iPhone mit Expo Go fuer SDK 58 bestaetigt: App-Start, Kameraaufnahme und Beleganzeige, Erhalt der Transaktion und des Fotos nach Neustart, Erfassen einer EUR-Ausgabe ohne Netzwerk, Wechselkursanzeige und gespeicherte USD/EUR-Umrechnung, Budgetwarnung und Validierung eines leeren Formulars. Modell und iOS-Version wurden nicht erfasst.
+
+Der vollstaendige Offline-Neustart ist mit einem installierten App-Build noch zu pruefen. Expo Go konnte ohne Verbindung zum Entwicklungsserver nicht erneut oeffnen. Ebenfalls offen: Kameraablehnung, Fotoersetzung, Offline-Loeschen, API-Ausfall/Cache auf dem Geraet und Wechsel der Hauptwaehrung. Automatische Tests ersetzen diese Nachweise nicht.
+
+Performance-Profiling ist noch nicht durchgefuehrt. Zur Vorbereitung: App mit Expo verbinden, im Terminal `j` fuer React Native DevTools druecken und Navigation/Statistiken im Profiler beziehungsweise Performance-Panel aufzeichnen. Geraet, Datenmenge und Ablauf konstant halten, nach einem Aufwaermdurchlauf mindestens dreimal messen und Ergebnisse vergleichen. Entwicklungsprofile dienen der Ursachensuche; belastbare Geschwindigkeitsmessungen benoetigen einen Build ohne Entwicklungsmodus.
+
+Vor der Abgabe fehlen echte Screenshots oder GIFs der App. Der Repository-Inhaber muss ausserdem die Kursvorgabe zu privater Sichtbarkeit und `FHTW-CPD` sowie die Herkunft aus dem offiziellen Template klaeren. Moodle-Link und Deadline kontrolliert das Team; eine Moodle-Abgabe wurde hier nicht durchgefuehrt.
 
 ## Code-Walkthrough
 
