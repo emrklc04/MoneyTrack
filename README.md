@@ -1,89 +1,164 @@
 # MoneyTrack
 
-Mobiles Haushaltsbuch mit Expo SDK 58, React Native und TypeScript. Dashboard, Transaktionen, Statistiken, Monatsbudgets, Einstellungen und fotografierte Belege.
+**Einnahmen, Ausgaben und Budgets auf einen Blick.**
 
-Repository: [emrklc04/MoneyTrack](https://github.com/emrklc04/MoneyTrack). Gemeinsamer Zustand mit React Context und `useReducer`.
+MoneyTrack ist ein mobiles Haushaltsbuch mit React Native und Expo. Transaktionen und Belege werden lokal gespeichert. Wechselkurse ermöglichen die Umrechnung von Fremdwährungen in eine gemeinsame Hauptwährung.
 
 [![CI](https://github.com/emrklc04/MoneyTrack/actions/workflows/ci.yml/badge.svg)](https://github.com/emrklc04/MoneyTrack/actions/workflows/ci.yml)
 
-Team: [emrklc04](https://github.com/emrklc04) und [kokoloko99](https://github.com/kokoloko99). Beide Konten haben eigene Commits auf `main`.
+**Team:** [emrklc04](https://github.com/emrklc04) · [kokoloko99](https://github.com/kokoloko99)
 
-## Start
+## Funktionen
 
-Node.js 22.13 oder neuer innerhalb der 22er-Reihe und npm verwenden. Repository klonen und in den Projektordner wechseln:
+| Bereich | Möglichkeiten |
+|---|---|
+| Dashboard | Einnahmen, Ausgaben, Saldo und letzte Transaktionen ansehen |
+| Transaktionen | Einnahmen und Ausgaben mit Kategorie und Beschreibung erfassen, Details öffnen und Einträge löschen |
+| Belege | Belege mit der Kamera fotografieren und zur Transaktion speichern |
+| Statistiken | Ausgaben nach Kategorien und das Verhältnis von Einnahmen und Ausgaben auswerten |
+| Budgets | Monatliche Kategorienbudgets festlegen und Überschreitungen erkennen |
+| Währungen | Fremdwährungen umrechnen und die Hauptwährung in den Einstellungen ändern |
+| Offline-Nutzung | Lokale Daten und Belege ohne Internet ansehen und Transaktionen in der Hauptwährung erfassen |
 
-```powershell
+Die Navigation besteht aus fünf Tabs sowie einer Detailansicht und einem Formular zum Hinzufügen von Transaktionen.
+
+## Technologie
+
+| Aufgabe | Umsetzung |
+|---|---|
+| App | React Native 0.88, Expo SDK 58, React 19.3 und TypeScript |
+| Navigation | Expo Router |
+| State Management | React Context und `useReducer` |
+| Lokale Daten | SQLite über `expo-sqlite` |
+| Kamera und Belege | `expo-camera`, `expo-file-system` und `expo-image` |
+| Wechselkurse | Frankfurter REST-API |
+| Tests und CI | Jest, React Native Testing Library und GitHub Actions |
+
+## Lokal starten
+
+### Voraussetzungen
+
+- Node.js 22, mindestens Version 22.13, und npm
+- Git
+- Ein Smartphone mit Expo Go für **SDK 58** oder ein passender Development Build
+- Für den Start über das lokale Netzwerk: Smartphone und Computer im selben WLAN
+
+### 1. Projekt installieren
+
+```bash
 git clone https://github.com/emrklc04/MoneyTrack.git
 cd MoneyTrack
-```
-
-```powershell
 npm ci
-Copy-Item .env.example .env
-npx expo start
 ```
 
-Eine vorhandene .env behalten. Auf einem passenden Expo Go oder Development Build auf Android/iOS starten. Web ersetzt keinen nativen Test.
+### 2. Umgebung konfigurieren
 
-## Konfiguration und Sicherheit
+Die Datei `.env.example` nach `.env` kopieren. Eine vorhandene `.env` beibehalten.
 
-.env konfiguriert EXPO_PUBLIC_EXCHANGE_API_URL. .env und Varianten sind ausgeschlossen; .env.example bleibt als Vorlage erhalten. Expo nimmt EXPO_PUBLIC_-Werte ins App-Bundle auf: nur oeffentliche Konfiguration verwenden. Keine privaten API-/AI-Schluessel im Client hinterlegen; diese gehoeren auf einen Server. Die Wechselkurs-API benoetigt keinen Schluessel.
-
-## Architektur
-
-- src/app: Expo Router, fuenf Tabs plus Formular-Modal und Detail-Stack.
-- src/context: AppContext mit useReducer fuer gemeinsame Daten und kontrollierte Updates nach erfolgreichem Speichern.
-- src/models: TypeScript-Datenmodelle.
-- src/services: REST-Abfragen, Umrechnung und Belegspeicherung.
-- src/config: Umgebungskonfiguration.
-- src/database: SQLite und parametrisierte Abfragen.
-- src/components und src/hooks: wiederverwendbare UI und Hooks.
-- src/utils: Finanzberechnungen und Formatierung.
-
-Datenfluss: Formular -> Wechselkurs-Service -> Context -> SQLite -> Reducer -> Dashboard/Liste. Alle Screens lesen denselben Context.
-
-## Offline und Waehrungen
-
-Transaktionen, Budgets, Hauptwaehrung und Kurse liegen in SQLite; Fotos im Dokumentenverzeichnis. Beim Start werden gespeicherte Daten geladen. Bei Ladefehlern erscheint eine Wiederholungsoption.
-
-Die Kursanzeige zeigt Laden, Erfolg mit Kursdatum und Umrechnung sowie Fehler mit Wiederholen. Eine Anfrage hat zehn Sekunden Timeout. Bei API-Ausfall wird ein vorhandener Kurs mit Cache-Hinweis verwendet; Aktualitaet ist dann nicht garantiert.
-
-Neue Fremdwaehrungstransaktionen ohne Kurs werden nicht gespeichert. Hauptwaehrung funktioniert offline. Alte Fremdwaehrungseintraege ohne Umrechnung erscheinen im Original und werden mit Hinweis aus Summen ausgeschlossen.
-
-Beim Wechsel der Hauptwaehrung werden bisherige umgerechnete Betraege und Budgets gemeinsam umgerechnet und atomar gespeichert. Originalbetraege bleiben erhalten. Alte Eintraege ohne Umrechnung werden aus ihrer Originalwaehrung umgerechnet. Fehlt ein noetiger Kurs, bleibt der Stand erhalten. Dies konvertiert bisherige Buchwerte und rekonstruiert keine historischen Tageskurse.
-
-## Pruefungen
+**Windows / PowerShell:**
 
 ```powershell
-npm test -- --runInBand
-npm run lint
-npx tsc --noEmit
-npx expo export --platform android
+Copy-Item .env.example .env
 ```
 
-Tests: Reducer, Finanzberechnungen, API-/Cache-Fehler, ungueltige Kurse, Timeout und Waehrungswechsel. Unit-Tests ersetzen keine nativen Kamera-/SQLite-Tests.
+**macOS / Linux:**
 
-UI-Komponententests: `npm run test:components`. Einzelne Unit-Tests: `npm run test:unit`. Die Komponententests pruefen Ladeanzeige, Kurs/Datum/Umrechnung, Cache-Hinweis, Fehler, Wiederholen und verspaetete Antworten. Dabei wird nur der Wechselkurs-Service simuliert; die Komponente wird mit React Native Testing Library gerendert und bedient.
+```bash
+cp .env.example .env
+```
 
-GitHub Actions prueft Pushes auf `main` und Pull Requests mit Lint, Typecheck, Tests und einem Secret-Scan der Git-Historie. Der aktuelle Ausfuehrungsstatus steht unter [Actions](https://github.com/emrklc04/MoneyTrack/actions). Am 8. November 2026 bestanden lokal und auf GitHub alle 36 Tests sowie Lint, Typecheck und Secret-Scan. Zwei gepruefte IDE-Tab-UUIDs sind als gezielte Fehlalarme in `.gitleaksignore` dokumentiert. `.env` wird nicht versioniert.
+Die Vorlage enthält den öffentlichen Wechselkurs-Endpoint:
 
-## Geraetetests und offene Pruefungen
+```dotenv
+EXPO_PUBLIC_EXCHANGE_API_URL=https://api.frankfurter.dev/v1
+```
 
-Vom Nutzer auf einem iPhone mit Expo Go fuer SDK 58 bestaetigt: App-Start, Kameraaufnahme und Beleganzeige, Erhalt der Transaktion und des Fotos nach Neustart, Erfassen einer EUR-Ausgabe ohne Netzwerk, Wechselkursanzeige und gespeicherte USD/EUR-Umrechnung, Budgetwarnung und Validierung eines leeren Formulars. Modell und iOS-Version wurden nicht erfasst.
+Für diese API wird kein Schlüssel benötigt.
 
-Der vollstaendige Offline-Neustart ist mit einem installierten App-Build noch zu pruefen. Expo Go konnte ohne Verbindung zum Entwicklungsserver nicht erneut oeffnen. Ebenfalls offen: Kameraablehnung, Fotoersetzung, Offline-Loeschen, API-Ausfall/Cache auf dem Geraet und Wechsel der Hauptwaehrung. Automatische Tests ersetzen diese Nachweise nicht.
+### 3. App öffnen
 
-Performance-Profiling ist noch nicht durchgefuehrt. Zur Vorbereitung: App mit Expo verbinden, im Terminal `j` fuer React Native DevTools druecken und Navigation/Statistiken im Profiler beziehungsweise Performance-Panel aufzeichnen. Geraet, Datenmenge und Ablauf konstant halten, nach einem Aufwaermdurchlauf mindestens dreimal messen und Ergebnisse vergleichen. Entwicklungsprofile dienen der Ursachensuche; belastbare Geschwindigkeitsmessungen benoetigen einen Build ohne Entwicklungsmodus.
+```bash
+npm start
+```
 
-Vor der Abgabe fehlen echte Screenshots oder GIFs der App. Der Repository-Inhaber muss ausserdem die Kursvorgabe zu privater Sichtbarkeit und `FHTW-CPD` sowie die Herkunft aus dem offiziellen Template klaeren. Moodle-Link und Deadline kontrolliert das Team; eine Moodle-Abgabe wurde hier nicht durchgefuehrt.
+Den QR-Code mit dem Smartphone öffnen. Auf dem iPhone lässt sich dafür die Kamera verwenden. Expo Go und die SDK-Version des Projekts müssen zusammenpassen.
 
-## Code-Walkthrough
+Die App ist auf mobile Nutzung ausgelegt. Die Kamera muss auf einem echten Gerät getestet werden.
 
-1. Navigation in beiden _layout.tsx erklaeren.
-2. Eine Transaktion durch Formular, Service, Context und Datenbank bis zum Dashboard verfolgen.
-3. Reducer und unveraenderliche Updates erklaeren.
-4. API-Erfolg, Timeout, Cache und fehlenden Kurs demonstrieren.
-5. Kamera-Berechtigung, Aufnahme und dauerhafte Bildspeicherung erklaeren.
-6. Waehrungswechsel und Tests anhand konkreter Beispiele erlaeutern.
+## Projektstruktur
 
-Die genaue AI Usage Policy muss das Team noch pruefen. Hilfsmittel und eigene Beitraege entsprechend dokumentieren.
+```text
+src/
+├── app/          Screens und Navigation mit Expo Router
+├── components/   Wiederverwendbare UI und Diagramme
+├── config/       Öffentliche Umgebungskonfiguration
+├── context/      Gemeinsamer App-Zustand und Reducer
+├── database/     SQLite-Tabellen und Datenzugriff
+├── hooks/        Gemeinsame Hooks und Farbschema
+├── models/       Datenmodelle für Transaktionen, Kategorien und Budgets
+├── services/     Wechselkurse, Umrechnung und Belegspeicherung
+└── utils/        Finanzberechnungen und Formatierung
+```
+
+Tests liegen jeweils in `__tests__`-Ordnern bei den zugehörigen Modulen.
+
+**Datenfluss:** Das Formular verwendet die Services und speichert über den App-Context in SQLite. Nach erfolgreichem Speichern aktualisiert der Reducer den gemeinsamen Zustand. Dashboard, Liste und Statistiken greifen auf diesen Zustand zu.
+
+## Speicherung und Offline-Verhalten
+
+| Daten | Speicherort |
+|---|---|
+| Transaktionen, Kategorien und Budgets | SQLite auf dem Gerät |
+| Hauptwährung | Einstellung in SQLite |
+| Wechselkurse und Kursdatum | SQLite-Cache |
+| Belegbilder | Dokumentenverzeichnis der App |
+
+Eine Verbindung wird für neue Wechselkurse benötigt. Schlägt eine Anfrage fehl, verwendet die App einen bereits gespeicherten Kurs und zeigt einen Cache-Hinweis mit Kursdatum. Ohne verfügbaren Kurs wird eine neue Fremdwährungstransaktion nicht gespeichert. Die Anfrage wird nach zehn Sekunden abgebrochen.
+
+Beim Wechsel der Hauptwährung werden bestehende Beträge und Budgets gemeinsam umgerechnet und gespeichert; Originalbeträge bleiben erhalten. Fehlt ein benötigter Kurs, bleibt der bisherige Stand bestehen. Die Umrechnung basiert auf verfügbaren Kursen und rekonstruiert keine historischen Tageskurse. Alte Fremdwährungseinträge ohne Umrechnung werden in der Originalwährung angezeigt und mit Hinweis aus Summen ausgeschlossen.
+
+**Offline-Start:** Die Datenspeicherung funktioniert unabhängig vom Netzwerk. Expo Go kann zum erneuten Laden der App jedoch eine Verbindung zum Entwicklungsserver benötigen. Ein vollständiger Offline-Neustart muss deshalb zusätzlich mit einem installierten App-Build geprüft werden.
+
+## Tests und Qualitätssicherung
+
+| Befehl | Prüfung |
+|---|---|
+| `npm test` | Alle Unit- und Komponententests |
+| `npm run test:unit` | Reducer, Finanzlogik und Services |
+| `npm run test:components` | UI-Zustände und Bedienung der Wechselkursanzeige |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | TypeScript |
+
+Die Tests prüfen unter anderem Summen, Budgetüberschreitungen, State-Updates, API-Antworten, Cache-Nutzung, Timeout und Fehlerfälle. Die UI-Tests rendern die Wechselkursanzeige und prüfen Laden, Erfolg, Cache-Hinweis und erneutes Laden. Der externe Wechselkurs-Service wird dabei simuliert.
+
+**Stand vom 8. November 2026:** 36 Tests bestanden; Lint, Typecheck und Secret-Scan waren lokal und in GitHub Actions erfolgreich. Den aktuellen CI-Status zeigt das Badge oben beziehungsweise der [Actions-Tab](https://github.com/emrklc04/MoneyTrack/actions).
+
+Die CI läuft bei Pushes auf `main` und Pull Requests. Sie installiert die festgelegten Abhängigkeiten mit `npm ci`, prüft Code und Tests und scannt die ausgecheckte Git-Historie mit Gitleaks. Sie erstellt oder veröffentlicht keinen App-Build.
+
+### Auf dem iPhone geprüft
+
+- App-Start mit Expo Go für SDK 58
+- Kameraaufnahme, Speichern und Anzeigen eines Belegs
+- Erhalt von Transaktion und Foto nach einem App-Neustart mit Verbindung
+- Erfassen einer EUR-Ausgabe und Anzeigen eines gespeicherten Belegs ohne Internet
+- Wechselkursanzeige und gespeicherte USD/EUR-Umrechnung
+- Budgetwarnung und Validierung eines leeren Formulars
+
+Diese manuellen Ergebnisse wurden vom Team im gemeinsamen Test bestätigt. Automatische Tests ersetzen keine Hardware- oder vollständigen Gerätetests.
+
+## Sicherheit
+
+`.env` und ihre Varianten sind über `.gitignore` ausgeschlossen. `.env.example` enthält ausschließlich die öffentliche Beispielkonfiguration. `EXPO_PUBLIC_`-Werte sind im App-Bundle sichtbar und dürfen keine privaten Schlüssel enthalten.
+
+Die App verwendet aktuell keine Anmeldung und speichert keine Auth-Tokens. Für eine spätere Anmeldung müssen Zugangsdaten getrennt von gewöhnlichen App-Daten sicher gespeichert werden. Finanzdaten und Belege liegen lokal, sind dadurch aber nicht automatisch verschlüsselt.
+
+Zwei überprüfte Gitleaks-Treffer aus alten IDE-Tab-UUIDs sind als gezielte Fehlalarme in `.gitleaksignore` dokumentiert. Persönliche IDE-Dateien, lokale Expo-Dateien, Abhängigkeiten und Bundle-Exporte werden nicht neu versioniert.
+
+## Noch offen vor der Abgabe
+
+- Screenshots oder GIFs der wichtigsten App-Abläufe ergänzen.
+- Kameraablehnung, Fotoersetzung, Offline-Löschen, API-Ausfall/Cache und Hauptwährungswechsel auf dem Gerät vollständig prüfen.
+- Den vollständigen Offline-Neustart mit einem installierten App-Build testen.
+- Performance auf dem Gerät messen; bisher liegen keine Profiling-Ergebnisse vor. Für eine erste Analyse lassen sich React Native DevTools im Expo-Terminal mit `j` öffnen. Entwicklungsprofile ersetzen keine Messung eines Builds ohne Entwicklungsmodus.
+- Die Kursvorgaben zu privater Repository-Sichtbarkeit, `FHTW-CPD` und dem offiziellen Template mit dem Repository-Inhaber klären.
+- Die konkrete AI Usage Policy beachten, den Code-Walkthrough vorbereiten und den Repository-Link vor der Deadline auf Moodle einreichen.
