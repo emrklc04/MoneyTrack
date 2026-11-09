@@ -8,12 +8,16 @@ import { ExchangeRatePreview } from '@/components/ExchangeRatePreview';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useAppContext } from '@/context/AppContext';
+import { useTheme } from '@/hooks/use-theme';
 import type { TransactionType } from '@/models/Transaction';
 import { type ExchangeRate, SUPPORTED_CURRENCIES } from '@/services/currencyService';
 import { saveReceiptImage } from '@/services/receiptService';
 
 export default function AddTransactionScreen() {
   const router = useRouter();
+  const theme = useTheme();
+  const optionSurface = { backgroundColor: theme.backgroundElement };
+  const inputColors = { color: theme.text, backgroundColor: theme.background, borderColor: theme.textSecondary };
   const { addTransaction, categories, homeCurrency } = useAppContext();
   const [transactionId] = useState(() => `${Date.now()}-${Math.random().toString(36).slice(2)}`);
   const [type, setType] = useState<TransactionType>('expense');
@@ -135,7 +139,7 @@ export default function AddTransactionScreen() {
                 setType(option);
                 setCategoryId('');
               }}
-              style={[styles.typeButton, type === option && styles.selected]}
+              style={[styles.typeButton, optionSurface, type === option && styles.selected]}
             >
               <ThemedText style={type === option ? styles.selectedText : undefined}>
                 {option === 'expense' ? 'Ausgabe' : 'Einnahme'}
@@ -148,14 +152,16 @@ export default function AddTransactionScreen() {
           keyboardType="decimal-pad"
           onChangeText={setAmount}
           placeholder="Betrag"
-          style={styles.input}
+          placeholderTextColor={theme.textSecondary}
+          style={[styles.input, inputColors]}
           value={amount}
         />
         <TextInput
           accessibilityLabel="Beschreibung"
           onChangeText={setDescription}
           placeholder="Beschreibung"
-          style={styles.input}
+          placeholderTextColor={theme.textSecondary}
+          style={[styles.input, inputColors]}
           value={description}
         />
         <ThemedText type="smallBold">Währung</ThemedText>
@@ -164,7 +170,7 @@ export default function AddTransactionScreen() {
             <Pressable
               key={code}
               onPress={() => { if (code !== currency) { setExchangeRate(undefined); setCurrency(code); } }}
-              style={[styles.category, currency === code && styles.selected]}
+              style={[styles.category, optionSurface, currency === code && styles.selected]}
             >
               <ThemedText style={currency === code ? styles.selectedText : undefined}>{code}</ThemedText>
             </Pressable>
@@ -180,7 +186,7 @@ export default function AddTransactionScreen() {
             <Pressable
               key={category.id}
               onPress={() => setCategoryId(category.id)}
-              style={[styles.category, categoryId === category.id && styles.selected]}
+              style={[styles.category, optionSurface, categoryId === category.id && styles.selected]}
             >
               <ThemedText style={categoryId === category.id ? styles.selectedText : undefined}>
                 {category.name}
@@ -189,7 +195,7 @@ export default function AddTransactionScreen() {
           ))}
         </View>
         <ThemedText type="small">Datum: {new Date().toISOString().slice(0, 10)}</ThemedText>
-        <Pressable onPress={openCamera} style={styles.receiptButton}>
+        <Pressable onPress={openCamera} style={[styles.receiptButton, optionSurface]}>
           <ThemedText>{receiptUri ? 'Beleg ersetzen' : 'Beleg hinzufügen'}</ThemedText>
         </Pressable>
         {receiptUri ? <Image source={{ uri: receiptUri }} style={styles.receiptPreview} contentFit="cover" /> : null}
@@ -220,13 +226,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 12,
     borderRadius: 10,
-    backgroundColor: '#f0f0f3',
   },
   category: {
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderRadius: 18,
-    backgroundColor: '#f0f0f3',
   },
   selected: {
     backgroundColor: '#2563eb',
@@ -238,10 +242,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 12,
     borderWidth: 1,
-    borderColor: '#999999',
     borderRadius: 10,
-    color: '#111111',
-    backgroundColor: '#ffffff',
   },
   saveButton: {
     alignItems: 'center',
@@ -271,7 +272,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 12,
     borderRadius: 10,
-    backgroundColor: '#f0f0f3',
   },
   receiptPreview: {
     height: 200,
