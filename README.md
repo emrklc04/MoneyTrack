@@ -30,14 +30,14 @@ Aufnahmen aus dem Android-Emulator mit Beispieldaten. Die Bilder zeigen untersch
 
 | Dashboard | Statistiken | Budgets |
 |:---:|:---:|:---:|
-| <img src="assets/screenshots/dashboard.png" alt="Dashboard mit Einnahmen, Ausgaben, Saldo und letzten Transaktionen" width="220"> | <img src="assets/screenshots/statistics.png" alt="Statistiken mit Sparquote und Ausgaben nach Kategorien" width="220"> | <img src="assets/screenshots/budgets.png" alt="Monatsbudgets mit Fortschrittsbalken und Warnung bei Überschreitung" width="220"> |
+| <img src="https://raw.githubusercontent.com/emrklc04/MoneyTrack/main/assets/screenshots/dashboard.png" alt="Dashboard mit Einnahmen, Ausgaben, Saldo und letzten Transaktionen" width="220"> | <img src="https://raw.githubusercontent.com/emrklc04/MoneyTrack/main/assets/screenshots/statistics.png" alt="Statistiken mit Sparquote und Ausgaben nach Kategorien" width="220"> | <img src="https://raw.githubusercontent.com/emrklc04/MoneyTrack/main/assets/screenshots/budgets.png" alt="Monatsbudgets mit Fortschrittsbalken und Warnung bei Überschreitung" width="220"> |
 | Finanzen auf einen Blick | Ausgaben und Sparquote auswerten | Monatslimits im Blick behalten |
 
 ### Transaktion mit Fremdwährung
 
 | Neue Transaktion | Transaktionsdetails |
 |:---:|:---:|
-| <img src="assets/screenshots/add-transaction.png" alt="Formular für eine USD-Ausgabe mit Wechselkurs, Kursdatum und EUR-Umrechnung" width="260"> | <img src="assets/screenshots/transaction-details.png" alt="Gespeicherter Online-Einkauf mit umgerechnetem Betrag und Originalbetrag in USD" width="260"> |
+| <img src="https://raw.githubusercontent.com/emrklc04/MoneyTrack/main/assets/screenshots/add-transaction.png" alt="Formular für eine USD-Ausgabe mit Wechselkurs, Kursdatum und EUR-Umrechnung" width="260"> | <img src="https://raw.githubusercontent.com/emrklc04/MoneyTrack/main/assets/screenshots/transaction-details.png" alt="Gespeicherter Online-Einkauf mit umgerechnetem Betrag und Originalbetrag in USD" width="260"> |
 | Betrag, Kategorie und Währung auswählen | Gespeicherte Angaben und Originalbetrag ansehen |
 
 ## Technologie

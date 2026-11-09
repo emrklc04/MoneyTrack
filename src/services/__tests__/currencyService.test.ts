@@ -36,7 +36,10 @@ describe('getExchangeRate', () => {
     expect(result).toEqual({ from: 'USD', to: 'EUR', rate: 0.9, date: '2026-10-08', source: 'live' });
     expect(global.fetch).toHaveBeenCalledWith(
       expect.stringContaining('/latest?base=USD&symbols=EUR'),
-      expect.objectContaining({ cache: 'no-store' }),
+      expect.objectContaining({
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache, no-store' },
+      }),
     );
     expect(mockCacheRate).toHaveBeenCalledWith('USD_EUR', 0.9, '2026-10-08');
   });
